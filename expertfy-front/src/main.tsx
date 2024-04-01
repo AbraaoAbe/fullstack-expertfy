@@ -7,6 +7,7 @@ import Home from "./pages/Home/Home.tsx"
 import Search from "./pages/Search/Search.tsx"
 import Contact from "./pages/Contact/Contact.tsx"
 import Signup from "./pages/RegisterUser/RegisterUser.tsx"
+import EditUser from './pages/EditUser/EditUser.tsx'
 
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
@@ -18,7 +19,8 @@ const router = createBrowserRouter([
       { path: '/', element: <Home /> },
       { path: '/search', element: <Search /> },
       { path: '/contact', element: <Contact /> },
-      { path: '/signup', element: <Signup /> }
+      { path: '/signup', element: <Signup /> },
+      { path: '/edituser/:id', element: <EditUser /> },
     ]
   }
 ])

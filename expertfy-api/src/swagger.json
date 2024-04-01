@@ -408,38 +408,33 @@
             "type": "string",
             "format": "date"
           },
-          "login": {
+          "email": {
             "type": "string"
           },
-          "password": {
-            "type": "string",
-            "format": "password"
-          },
           "photo": {
-            "type": "Buffer",
-            "format": "binary"
+            "type": "string"
           },
-          "seniority": {
+          "phone": {
+            "type": "string"
+          },
+          "linkedin": {
+            "type": "string"
+          },
+          "team": {
             "type": "string"
           },
           "employmentStartDate": {
             "type": "string",
             "format": "date"
           },
-          "languages": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
+          "languageId": {
+            "type": "number"
           },
-          "phone": {
-            "type": "string"
+          "seniorityId": {
+            "type": "number"
           },
-          "email": {
-            "type": "string"
-          },
-          "linkedin": {
-            "type": "string"
+          "areaId": {
+            "type": "number"
           }
         }
       },

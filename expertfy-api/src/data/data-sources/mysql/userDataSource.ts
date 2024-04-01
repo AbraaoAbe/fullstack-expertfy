@@ -16,22 +16,23 @@ export class userDataSourceImpl implements userDataSource {
   public async createUser(user: userModel): Promise<boolean> {
     try {
       const query = `INSERT INTO ${userTable} 
-        (login, password, seniority, employmentStartDate, languages, phone, email, linkedin, name, lastName, birthDate, photo) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-  
+      (name, lastName, birthDate, email, photo, phone, linkedin, 
+        team, employmentStartDate, languageId, seniorityId, areaId)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+      
       const values = [
-        user.login,
-        user.password,
-        user.seniority,
-        user.employmentStartDate,
-        JSON.stringify(user.languages), 
-        user.phone,
-        user.email,
-        user.linkedin,
         user.name,
         user.lastName,
         user.birthDate,
-        user.photo, // Use o valor da imagem diretamente
+        user.email,
+        user.photo, 
+        user.phone,
+        user.linkedin,
+        user.team,
+        user.employmentStartDate,
+        user.languageId,
+        user.seniorityId,
+        user.areaId,
       ];
   
       const [rows, fields] = await this.db.query(query, values);
@@ -53,23 +54,23 @@ export class userDataSourceImpl implements userDataSource {
   public async updateUser(id: string, user: userModel): Promise<boolean> {
     try {
       const query = `UPDATE ${userTable} SET
-        login=?, password=?, seniority=?, employmentStartDate=?, languages=?, 
-        phone=?, email=?, linkedin=?, name=?, lastName=?, birthDate=?, photo=?
-        WHERE id=?`;
+      name=?, lastName=?, birthDate=?, email=?, photo=?, phone=?, linkedin=?, 
+      team=?, employmentStartDate=?, languageId=?, seniorityId=?, areaId=? 
+      WHERE id=?`;
   
       const values = [
-        user.login,
-        user.password,
-        user.seniority,
-        user.employmentStartDate,
-        JSON.stringify(user.languages), 
-        user.phone,
-        user.email,
-        user.linkedin,
         user.name,
         user.lastName,
         user.birthDate,
+        user.email,
         user.photo, 
+        user.phone,
+        user.linkedin,
+        user.team,
+        user.employmentStartDate,
+        user.languageId,
+        user.seniorityId,
+        user.areaId,
         id, 
       ];
   
@@ -99,21 +100,7 @@ export class userDataSourceImpl implements userDataSource {
   
       if (Array.isArray(rows)) {
         const newrows = rows as RowDataPacket[];
-        const user: userModel = {
-          id: newrows[0].id,
-          login: newrows[0].login,
-          password: newrows[0].password,
-          seniority: newrows[0].seniority,
-          employmentStartDate: newrows[0].employmentStartDate,
-          languages: JSON.parse(newrows[0].languages), // Assumindo que foi armazenado como JSON
-          phone: newrows[0].phone,
-          email: newrows[0].email,
-          linkedin: newrows[0].linkedin,
-          name: newrows[0].name,
-          lastName: newrows[0].lastName,
-          birthDate: newrows[0].birthDate,
-          photo: newrows[0].photo, // Presumindo que seja um Buffer
-        };
+        const user = newrows[0] as userModel; 
         return user;
       }
       return {} as userModel;
@@ -125,29 +112,19 @@ export class userDataSourceImpl implements userDataSource {
   
   public async getAllUsers(): Promise<userModel[]> {
     const query = `SELECT * FROM ${userTable}`;
-    const [rows, fields] = await this.db.query(query);
-  
-    if (Array.isArray(rows)) {
-      const newrows = rows as RowDataPacket[];
-      const users: userModel[] = newrows.map((row: RowDataPacket) => {
-        return {
-          id: row.id,
-          login: row.login,
-          password: row.password,
-          seniority: row.seniority,
-          employmentStartDate: row.employmentStartDate,
-          languages: JSON.parse(row.languages), // Novamente, ajuste conforme necessário
-          phone: row.phone,
-          email: row.email,
-          linkedin: row.linkedin,
-          name: row.name,
-          lastName: row.lastName,
-          birthDate: row.birthDate,
-          photo: row.photo, // Suponho que seja um Buffer
-        };
-      });
-  
-      return users;
+    
+    try {
+      const [rows, fields] = await this.db.query(query);
+
+      if (Array.isArray(rows)){
+        const newrows = rows as RowDataPacket[];
+        const users = newrows as userModel[];
+        return users;
+      }
+
+    } catch (error) {
+      console.log(error);
+      return [] as userModel[];
     }
     return [];
   }
@@ -158,8 +135,9 @@ export class userDataSourceImpl implements userDataSource {
       const query = `
       SELECT
         users.*,
-        (SELECT COUNT(*) FROM ${manifestTable} WHERE userId = users.id AND competenceId = '${competenceId}') AS competenceCount
-      FROM ${userTable} users
+        (SELECT COUNT(*) FROM ${manifestTable} WHERE userId = users.id AND competenceId = '${competenceId}') AS competenceCount,
+        s.name AS seniorityName
+      FROM ${userTable} users JOIN seniority s ON users.seniorityId = s.id
       WHERE users.id IN (SELECT userId FROM ${manifestTable} WHERE competenceId = '${competenceId}')
       ORDER BY competenceCount DESC;
     `;
@@ -170,20 +148,23 @@ export class userDataSourceImpl implements userDataSource {
         const users: expertListModel[] = newrows.map((row: RowDataPacket) => {
           const user: expertListModel = {
             id: row.id,
-            login: row.login,
-            password: row.password,
-            seniority: row.seniority,
-            employmentStartDate: row.employmentStartDate,
-            languages: row.languages,
-            phone: row.phone,
-            email: row.email,
-            linkedin: row.linkedin,
             name: row.name,
             lastName: row.lastName,
             birthDate: row.birthDate,
-            competenceCount: row.competenceCount || 0,
+            email: row.email,
             photo: row.photo,
+            phone: row.phone,
+            linkedin: row.linkedin,
+            team: row.team,
+            employmentStartDate: row.employmentStartDate,
+            languageId: row.languageId,
+            seniorityId: row.seniorityId,
+            areaId: row.areaId,
+            office: row.office,
+            competenceCount: row.competenceCount,
+            seniorityName: row.seniorityName,
           };
+            
           return user;
         });
   

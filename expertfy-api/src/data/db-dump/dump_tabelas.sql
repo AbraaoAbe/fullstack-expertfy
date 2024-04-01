@@ -24,32 +24,32 @@ DROP TABLE IF EXISTS `user`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `login` varchar(45) NOT NULL,
-  `password` varchar(45) NOT NULL,
-  `role` varchar(45) NOT NULL,
-  `seniority` varchar(45) NOT NULL,
-  `languages` varchar(35) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
-  `phone` varchar(45) DEFAULT NULL,
-  `email` varchar(45) DEFAULT NULL,
+  `email` varchar(45) NOT NULL,
+  `phone` varchar(45) NOT NULL,
   `linkedin` varchar(45) DEFAULT NULL,
   `name` varchar(45) DEFAULT NULL,
   `lastName` varchar(45) DEFAULT NULL,
   `birthDate` date DEFAULT NULL,
-  `employmentStartDate` date DEFAULT NULL,
+  `employmentStartDate` date NOT NULL,
+  `languages` varchar(35) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
+  `role` varchar(45) NOT NULL,
+  `seniority` varchar(45) NOT NULL,
+  `photo` varchar(255) DEFAULT NULL,
+  `team` varchar(45) DEFAULT NULL,
+  `languageId` varchar(45) NOT NULL,
+  `seniorityId` varchar(45) NOT NULL,
+  `areaId` varchar(45) NOT NULL,
+  `office` varchar(45) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1004 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='login, password, role, seniority, timeInCompany, languages, phone, email, linkedin, name, lastName, dateBorn';
-/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `user`
 --
 
-LOCK TABLES `user` WRITE;
-/*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (999,'admin','admin','admin','alta',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(1000,'joao123','senha123','user','Júnior','English','(11) 1234-5678','joao@example.com','linkedin.com/in/joao123','João','Silva','1990-05-15',NULL),(1001,'aaawwweee','senha123','Desenvolvedor','Júnior','Java, JavaScript','(11) 1234-5678','joao@example.com','linkedin.com/in/joao123','João','Silva','1990-05-15',NULL),(1002,'string','********','string','string','string','string','string','string','string','string','2023-09-25',NULL);
-/*!40000 ALTER TABLE `user` ENABLE KEYS */;
-UNLOCK TABLES;
+
 
 
 DROP TABLE IF EXISTS `competence`;

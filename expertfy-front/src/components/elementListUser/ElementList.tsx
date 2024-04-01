@@ -6,7 +6,7 @@ interface Expert {
   name: string;
   seniority: string;
   email: string;
-  photo: Object; //blob
+  photo: string; //way for the image in backend
   competenceCount: number;
 }
 
@@ -15,20 +15,6 @@ interface ElementListProps {
 }
 
 
-
-const blobToImage = (theBlob: any): string => {
-  if (!theBlob) return '';
-
-  const bufferData = theBlob.data; // Extraia os dados da imagem
-
-  // Crie um Blob a partir dos dados
-  const imageBlob = new Blob([bufferData], { type: 'image/jpeg' }); // Substitua 'image/jpeg' pelo tipo de imagem apropriado
-
-  // Converta o Blob em uma URL
-  const blobUrl = URL.createObjectURL(imageBlob);
-
-  return blobUrl;
-}
 
 
 const ElementList: React.FC<ElementListProps> = ({ userList }) => {
@@ -47,7 +33,7 @@ const ElementList: React.FC<ElementListProps> = ({ userList }) => {
               {user.email}
             </div>
             <div className='user-photo'>
-              <img src={blobToImage(user.photo)} alt={user.name} />
+              <img src={user.photo} alt={user.photo} />
             </div>
             <div className='user-competence-count'>
               {user.competenceCount}
