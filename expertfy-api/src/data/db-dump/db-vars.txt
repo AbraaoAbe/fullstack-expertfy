@@ -1,7 +1,0 @@
-PORT=3000
-MYSQL_HOST=localhost
-MYSQL_USER=labes
-MYSQL_PASSWORD=labes
-MYSQL_DB=expertfyDB
-
-//crie um '.env' e coloque as variaveis acima

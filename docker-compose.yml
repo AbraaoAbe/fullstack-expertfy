@@ -8,7 +8,8 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - ./expertfy-api/src/data/new-db-dump:/docker-entrypoint-initdb.d
+      - ./expertfy-api/src/data/db-dump:/docker-entrypoint-initdb.d
+      - db-volume:/var/lib/mysql
     environment:
       MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
   api-expertfy:
@@ -22,15 +23,19 @@ services:
     command: npm run dev
     depends_on:
       - db-mysql
+    volumes:
+      - ./expertfy-api/src:/usr/src/app/src
   fe-expertfy:
     build:
-      context: ./new-front
+      context: ./expertfy-front
       dockerfile: Dockerfile
     ports:
       - "5173:5173"
     command: npm run dev
     depends_on:
       - api-expertfy
+    volumes:
+      - ./expertfy-front/src:/usr/src/app/src # Descomente para utilizar o recurso de hot reload (ctrl + s = atualiza a página)
 
 volumes:
   db-volume:

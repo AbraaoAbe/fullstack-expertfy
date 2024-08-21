@@ -4,40 +4,110 @@ import mysql from "mysql2/promise";
 import dotenv from "dotenv";
 import { connection } from './data/connection'
 
-//ROUTES AREA
-import userRouter from './presentation/routers/userRouter'
-import { userRepositoryImpl } from './domain/respositories/userRepository'
-import { userDataSourceImpl } from "./data/data-sources/mysql/userDataSource";
-//use-cases
-import { getAllUserUseCaseImpl } from './domain/use-cases/user/getAllUser'
-import { createUserUseCaseImpl } from './domain/use-cases/user/createUser'
-import { updateUserUseCaseImpl } from './domain/use-cases/user/updateUser'
-import { deleteUserUseCaseImpl } from './domain/use-cases/user/deleteUser'
-import { getUserByIdUseCaseImpl } from './domain/use-cases/user/getUserById'
-import { getUsersAndCountByCompetenceIdUseCaseImpl } from './domain/use-cases/user/getUsersAndCountByCompetenceId'
+//PERSON AREA
+import personRouter from './presentation/routers/personRouter'
+import { PersonRepositoryImpl } from './domain/respositories/personRepository'
+import { PersonDataSourceImpl } from './data/data-sources/personDataSource';
+import { GetAllPersonUseCaseImpl } from './domain/use-cases/person/getAllPerson'
+import { CreatePersonUseCaseImpl } from './domain/use-cases/person/createPerson'
+import { UpdatePersonUseCaseImpl } from './domain/use-cases/person/updatePerson'
+import { DeletePersonUseCaseImpl } from './domain/use-cases/person/deletePerson'
+import { GetPersonByIdUseCaseImpl } from './domain/use-cases/person/getPersonById'
+import { GetPersonAccountInfoUseCaseImpl } from './domain/use-cases/person/getPersonAccountInfo'
+import { GetPersonListBySkillTypeIdUseCaseImpl } from './domain/use-cases/person/getPersonListBySkillTypeId';
+//ADVANCED SEARCH AREA
 
-//COMPETENCE AREA
-import competenceRouter from "./presentation/routers/competenceRouter";
-import { competenceRepositoryImpl } from "./domain/respositories/competenceRepository";
-import { competenceDataSourceImpl } from "./data/data-sources/mysql/competenceDataSource";
-//use-cases
-import { createCompetenceUseCaseImpl } from "./domain/use-cases/competence/createCompetence";
-import { updateCompetenceUseCaseImpl } from "./domain/use-cases/competence/updateCompetence";
-import { deleteCompetenceUseCaseImpl } from "./domain/use-cases/competence/deleteCompetence";
-import { getCompetenceByIdUseCaseImpl } from "./domain/use-cases/competence/getCompetenceById";
-import { getAllCompetenceUseCaseImpl } from "./domain/use-cases/competence/getAllCompetence";
-import { getCompetenceByNameUseCaseImpl } from "./domain/use-cases/competence/getCompetenceByName";
+//Area
+import { AreaDataSourceImpl } from './data/data-sources/areaDataSource';
+import { AreaRepositoryImpl } from './domain/respositories/areaRepository';
+import { getAllAreasUseCaseImpl } from './domain/use-cases/area/getAllArea';
+import areaRouter from './presentation/routers/areaRouter';
+//Language
+import { LanguageDataSourceImpl } from './data/data-sources/languageDataSource';
+import { LanguageRepositoryImpl } from './domain/respositories/languageRepository';
+import { getAllLanguagesUseCaseImpl } from './domain/use-cases/language/getAllLanguage';
+import languageRouter from './presentation/routers/languageRouter';
+//Seniority
+import { SeniorityDataSourceImpl } from './data/data-sources/seniorityDataSource';
+import { SeniorityRepositoryImpl } from './domain/respositories/seniorityRepository';
+import { getAllSeniorityUseCaseImpl } from './domain/use-cases/seniority/getAllArea';
+import seniorityRouter from './presentation/routers/seniorityRouter';
 
-//MANIFESTCOMP AREA
-import manifestCompRouter from "./presentation/routers/manifestCompRouter";
-import { manifestCompRepositoryImpl } from "./domain/respositories/manifestCompRepository";
-import { manifestCompDataSourceImpl } from "./data/data-sources/mysql/manifestCompDataSource";
-//use-cases
-import { createManifestCompUseCaseImpl } from "./domain/use-cases/manifestComp/createManifestComp";
-import { updateManifestCompUseCaseImpl } from "./domain/use-cases/manifestComp/updateManifestComp";
-import { deleteManifestCompUseCaseImpl } from "./domain/use-cases/manifestComp/deleteManifestComp";
-import { getManifestCompByIdUseCaseImpl } from "./domain/use-cases/manifestComp/getManifestCompById";
-import { getAllManifestCompUseCaseImpl } from "./domain/use-cases/manifestComp/getAllManifestComp";
+
+//SKILL AREA
+import skillRouter from './presentation/routers/skillRouter';
+import { SkillDataSourceImpl } from './data/data-sources/skillDataSource';
+import { SkillRepositoryImpl } from './domain/respositories/skillRepository';
+import { GetAllSkillUseCaseImpl } from './domain/use-cases/skill/getAllSkill';
+import { CreateSkillUseCaseImpl } from './domain/use-cases/skill/createSkill';
+import { UpdateSkillUseCaseImpl } from './domain/use-cases/skill/updateSkill';
+import { DeleteSkillUseCaseImpl } from './domain/use-cases/skill/deleteSkill';
+import { GetSkillByIdUseCaseImpl } from './domain/use-cases/skill/getSkillById';
+
+//SKILL ENDORS AREA
+import skillEndorsRouter from './presentation/routers/skillEndorsRouter';
+import { SkillEndorsDataSourceImpl } from './data/data-sources/skillEndorsDataSource';
+import { SkillEndorsRepositoryImpl } from './domain/respositories/skillEndorsRepository';
+import { GetAllSkillEndorsUseCaseImpl } from './domain/use-cases/skillEndors/getAllSkillEndors';
+import { CreateSkillEndorsUseCaseImpl } from './domain/use-cases/skillEndors/createSkillEndors';
+import { UpdateSkillEndorsUseCaseImpl } from './domain/use-cases/skillEndors/updateSkillEndors';
+import { DeleteSkillEndorsUseCaseImpl } from './domain/use-cases/skillEndors/deleteSkillEndors';
+import { GetSkillEndorsByIdUseCaseImpl } from './domain/use-cases/skillEndors/getSkillEndorsById';
+import { GetCountSkillEndorsByPersonIdUseCaseImpl } from './domain/use-cases/skillEndors/getCountSkillEndorsByPersonId';
+
+//SKILL TYPE AREA
+import skillTypeRouter from './presentation/routers/skillTypeRouter';
+import { SkillTypeDataSourceImpl } from './data/data-sources/skillTypeDataSource';
+import { SkillTypeRepositoryImpl } from './domain/respositories/skillTypeRepository';
+import { GetAllSkillTypeUseCaseImpl } from './domain/use-cases/skillType/getAllSkillType';
+import { CreateSkillTypeUseCaseImpl } from './domain/use-cases/skillType/createSkillType';
+import { UpdateSkillTypeUseCaseImpl } from './domain/use-cases/skillType/updateSkillType';
+import { DeleteSkillTypeUseCaseImpl } from './domain/use-cases/skillType/deleteSkillType';
+import { GetSkillTypeByIdUseCaseImpl } from './domain/use-cases/skillType/getSkillTypeById';
+
+//ATTITUDE AREA
+import attitudeRouter from './presentation/routers/attitudeRouter';
+import { AttitudeDataSourceImpl } from './data/data-sources/attitudeDataSource';
+import { AttitudeRepositoryImpl } from './domain/respositories/attitudeRepository';
+import { GetAllAttitudeUseCaseImpl } from './domain/use-cases/attitude/getAllAttitude';
+import { CreateAttitudeUseCaseImpl } from './domain/use-cases/attitude/createAttitude';
+import { UpdateAttitudeUseCaseImpl } from './domain/use-cases/attitude/updateAttitude';
+import { DeleteAttitudeUseCaseImpl } from './domain/use-cases/attitude/deleteAttitude';
+import { GetAttitudeByIdUseCaseImpl } from './domain/use-cases/attitude/getAttitudeById';
+
+//ATTITUDE ENDORS AREA
+import attitudeEndorsRouter from './presentation/routers/attitudeEndorsRouter';
+import { AttitudeEndorsDataSourceImpl } from './data/data-sources/attitudeEndorsDataSource';
+import { AttitudeEndorsRepositoryImpl } from './domain/respositories/attitudeEndorsRepository';
+import { GetAllAttitudeEndorsUseCaseImpl } from './domain/use-cases/attitudeEndors/getAllAttitudeEndors';
+import { CreateAttitudeEndorsUseCaseImpl } from './domain/use-cases/attitudeEndors/createAttitudeEndors';
+import { UpdateAttitudeEndorsUseCaseImpl } from './domain/use-cases/attitudeEndors/updateAttitudeEndors';
+import { DeleteAttitudeEndorsUseCaseImpl } from './domain/use-cases/attitudeEndors/deleteAttitudeEndors';
+import { GetAttitudeEndorsByIdUseCaseImpl } from './domain/use-cases/attitudeEndors/getAttitudeEndorsById';
+
+//TASK OUTPUT AREA
+import taskOutputRouter from './presentation/routers/taskOutputRouter';
+import { TaskOutputDataSourceImpl } from './data/data-sources/taskOutputDataSource';
+import { TaskOutputRepositoryImpl } from './domain/respositories/taskOutputRepository';
+import { GetAllTaskOutputUseCaseImpl } from './domain/use-cases/taskOutput/getAllTaskOutput';
+import { CreateTaskOutputUseCaseImpl } from './domain/use-cases/taskOutput/createTaskOutput';
+import { UpdateTaskOutputUseCaseImpl } from './domain/use-cases/taskOutput/updateTaskOutput';
+import { DeleteTaskOutputUseCaseImpl } from './domain/use-cases/taskOutput/deleteTaskOutput';
+import { GetTaskOutputByIdUseCaseImpl } from './domain/use-cases/taskOutput/getTaskOutputById';
+
+//HUMAN TASK AREA
+import humanTaskRouter from './presentation/routers/humanTaskRouter';
+import { HumanTaskDataSourceImpl } from './data/data-sources/humanTaskDataSource';
+import { HumanTaskRepositoryImpl } from './domain/respositories/humanTaskRepository';
+import { GetAllHumanTaskUseCaseImpl } from './domain/use-cases/humanTask/getAllHumanTask';
+import { CreateHumanTaskUseCaseImpl } from './domain/use-cases/humanTask/createHumanTask';
+import { UpdateHumanTaskUseCaseImpl } from './domain/use-cases/humanTask/updateHumanTask';
+import { DeleteHumanTaskUseCaseImpl } from './domain/use-cases/humanTask/deleteHumanTask';
+import { GetHumanTaskByIdUseCaseImpl } from './domain/use-cases/humanTask/getHumanTaskById';
+import { GetCountGroupByPersonHumanTasksUsecaseImpl } from './domain/use-cases/humanTask/getCountGroupByPersonHumanTasks';
+import { GetHumanTaskTableListByPersonIdUseCaseImpl } from './domain/use-cases/humanTask/getHumanTaskTableListByPersonId';
+import { GetCountHumanTaskByPersonGroupBySkillUsecaseImpl } from './domain/use-cases/humanTask/getCountHumanTaskByPersonGroupBySkill';
+import { GetTotalCountHumanTaskGroupBySkillUsecaseImpl } from './domain/use-cases/humanTask/getTotalCountHumanTaskGroupBySkill';
 
 dotenv.config();
 const { MYSQL_HOST, MYSQL_DB, MYSQL_USER, MYSQL_PASSWORD } = process.env;
@@ -57,43 +127,109 @@ async function getMSQL_DS(dataSourceClass: any) {
 }
 
 (async () => {
-  const userDS = await getMSQL_DS(userDataSourceImpl)
+  const personDS = await getMSQL_DS(PersonDataSourceImpl)
 
-  const userMiddleWare = userRouter(
-    new getAllUserUseCaseImpl(new userRepositoryImpl(userDS)),
-    new createUserUseCaseImpl(new userRepositoryImpl(userDS)),
-    new updateUserUseCaseImpl(new userRepositoryImpl(userDS)),
-    new deleteUserUseCaseImpl(new userRepositoryImpl(userDS)),
-    new getUserByIdUseCaseImpl(new userRepositoryImpl(userDS)),
-    new getUsersAndCountByCompetenceIdUseCaseImpl(new userRepositoryImpl(userDS)),
+  const personMiddleWare = personRouter(
+    new GetAllPersonUseCaseImpl(new PersonRepositoryImpl(personDS)),
+    new CreatePersonUseCaseImpl(new PersonRepositoryImpl(personDS)),
+    new UpdatePersonUseCaseImpl(new PersonRepositoryImpl(personDS)),
+    new DeletePersonUseCaseImpl(new PersonRepositoryImpl(personDS)),
+    new GetPersonByIdUseCaseImpl(new PersonRepositoryImpl(personDS)),
+    new GetPersonAccountInfoUseCaseImpl(new PersonRepositoryImpl(personDS)),
+    new GetPersonListBySkillTypeIdUseCaseImpl(new PersonRepositoryImpl(personDS))
   )
 
-  const competenceDS = await getMSQL_DS(competenceDataSourceImpl)
+  //New routes for advanced search
 
-  const competenceMiddleWare = competenceRouter(
-    new getAllCompetenceUseCaseImpl(new competenceRepositoryImpl(competenceDS)),
-    new createCompetenceUseCaseImpl(new competenceRepositoryImpl(competenceDS)),
-    new updateCompetenceUseCaseImpl(new competenceRepositoryImpl(competenceDS)),
-    new deleteCompetenceUseCaseImpl(new competenceRepositoryImpl(competenceDS)),
-    new getCompetenceByIdUseCaseImpl(new competenceRepositoryImpl(competenceDS)),
-    new getCompetenceByNameUseCaseImpl(new competenceRepositoryImpl(competenceDS)),
+  const areaDS = await getMSQL_DS(AreaDataSourceImpl)
+  const languageDS = await getMSQL_DS(LanguageDataSourceImpl)
+  const seniorityDS = await getMSQL_DS(SeniorityDataSourceImpl)
+  const areaMiddleWare = areaRouter(new getAllAreasUseCaseImpl(new AreaRepositoryImpl(areaDS)))
+  const languageMiddleWare = languageRouter(new getAllLanguagesUseCaseImpl(new LanguageRepositoryImpl(languageDS)))
+  const seniorityMiddleWare = seniorityRouter(new getAllSeniorityUseCaseImpl(new SeniorityRepositoryImpl(seniorityDS)))
+
+  //NEW ROUTES FOR NEW DOMAIN (SKILL, ATTITUDE, SKILL_ENDORS, ATTITUDE_ENDORS)
+  const skillDS = await getMSQL_DS(SkillDataSourceImpl)
+  const attitudeDS = await getMSQL_DS(AttitudeDataSourceImpl)
+  const skillEndorsDS = await getMSQL_DS(SkillEndorsDataSourceImpl)
+  const attitudeEndorsDS = await getMSQL_DS(AttitudeEndorsDataSourceImpl)
+  const skillTypeDS = await getMSQL_DS(SkillTypeDataSourceImpl)
+  const taskOutputDS = await getMSQL_DS(TaskOutputDataSourceImpl)
+  const humanTaskDS = await getMSQL_DS(HumanTaskDataSourceImpl)
+
+  const skillMiddleWare = skillRouter(
+    new GetAllSkillUseCaseImpl(new SkillRepositoryImpl(skillDS)),
+    new CreateSkillUseCaseImpl(new SkillRepositoryImpl(skillDS)),
+    new UpdateSkillUseCaseImpl(new SkillRepositoryImpl(skillDS)),
+    new DeleteSkillUseCaseImpl(new SkillRepositoryImpl(skillDS)),
+    new GetSkillByIdUseCaseImpl(new SkillRepositoryImpl(skillDS)),
   )
 
-  const manifestCompDS = await getMSQL_DS(manifestCompDataSourceImpl)
-
-  const manifestCompMiddleWare = manifestCompRouter(
-    new getAllManifestCompUseCaseImpl(new manifestCompRepositoryImpl(manifestCompDS)),
-    new createManifestCompUseCaseImpl(new manifestCompRepositoryImpl(manifestCompDS)),
-    new updateManifestCompUseCaseImpl(new manifestCompRepositoryImpl(manifestCompDS)),
-    new deleteManifestCompUseCaseImpl(new manifestCompRepositoryImpl(manifestCompDS)),
-    new getManifestCompByIdUseCaseImpl(new manifestCompRepositoryImpl(manifestCompDS)),
+  const skillEndorsMiddleWare = skillEndorsRouter(
+    new GetAllSkillEndorsUseCaseImpl(new SkillEndorsRepositoryImpl(skillEndorsDS)),
+    new CreateSkillEndorsUseCaseImpl(new SkillEndorsRepositoryImpl(skillEndorsDS)),
+    new UpdateSkillEndorsUseCaseImpl(new SkillEndorsRepositoryImpl(skillEndorsDS)),
+    new DeleteSkillEndorsUseCaseImpl(new SkillEndorsRepositoryImpl(skillEndorsDS)),
+    new GetSkillEndorsByIdUseCaseImpl(new SkillEndorsRepositoryImpl(skillEndorsDS)),
+    new GetCountSkillEndorsByPersonIdUseCaseImpl(new SkillEndorsRepositoryImpl(skillEndorsDS)),
   )
 
+  const skillTypeMiddleWare = skillTypeRouter(
+    new GetAllSkillTypeUseCaseImpl(new SkillTypeRepositoryImpl(skillTypeDS)),
+    new CreateSkillTypeUseCaseImpl(new SkillTypeRepositoryImpl(skillTypeDS)),
+    new UpdateSkillTypeUseCaseImpl(new SkillTypeRepositoryImpl(skillTypeDS)),
+    new DeleteSkillTypeUseCaseImpl(new SkillTypeRepositoryImpl(skillTypeDS)),
+    new GetSkillTypeByIdUseCaseImpl(new SkillTypeRepositoryImpl(skillTypeDS)),
+  )
 
-  server.use("/user", userMiddleWare)
-  server.use("/competence", competenceMiddleWare)
-  server.use("/manifest", manifestCompMiddleWare)
-  server.get("/", (req, res) => res.send("Hello World"))
+  const attitudeMiddleWare = attitudeRouter(
+    new GetAllAttitudeUseCaseImpl(new AttitudeRepositoryImpl(attitudeDS)),
+    new CreateAttitudeUseCaseImpl(new AttitudeRepositoryImpl(attitudeDS)),
+    new UpdateAttitudeUseCaseImpl(new AttitudeRepositoryImpl(attitudeDS)),
+    new DeleteAttitudeUseCaseImpl(new AttitudeRepositoryImpl(attitudeDS)),
+    new GetAttitudeByIdUseCaseImpl(new AttitudeRepositoryImpl(attitudeDS)),
+  )
+
+  const attitudeEndorsMiddleWare = attitudeEndorsRouter(
+    new GetAllAttitudeEndorsUseCaseImpl(new AttitudeEndorsRepositoryImpl(attitudeEndorsDS)),
+    new CreateAttitudeEndorsUseCaseImpl(new AttitudeEndorsRepositoryImpl(attitudeEndorsDS)),
+    new UpdateAttitudeEndorsUseCaseImpl(new AttitudeEndorsRepositoryImpl(attitudeEndorsDS)),
+    new DeleteAttitudeEndorsUseCaseImpl(new AttitudeEndorsRepositoryImpl(attitudeEndorsDS)),
+    new GetAttitudeEndorsByIdUseCaseImpl(new AttitudeEndorsRepositoryImpl(attitudeEndorsDS)),
+  )
+
+  const taskOutputMiddleWare = taskOutputRouter(
+    new GetAllTaskOutputUseCaseImpl(new TaskOutputRepositoryImpl(taskOutputDS)),
+    new CreateTaskOutputUseCaseImpl(new TaskOutputRepositoryImpl(taskOutputDS)),
+    new UpdateTaskOutputUseCaseImpl(new TaskOutputRepositoryImpl(taskOutputDS)),
+    new DeleteTaskOutputUseCaseImpl(new TaskOutputRepositoryImpl(taskOutputDS)),
+    new GetTaskOutputByIdUseCaseImpl(new TaskOutputRepositoryImpl(taskOutputDS)),
+  )
+
+  const humanTaskMiddleWare = humanTaskRouter(
+    new GetAllHumanTaskUseCaseImpl(new HumanTaskRepositoryImpl(humanTaskDS)),
+    new CreateHumanTaskUseCaseImpl(new HumanTaskRepositoryImpl(humanTaskDS)),
+    new UpdateHumanTaskUseCaseImpl(new HumanTaskRepositoryImpl(humanTaskDS)),
+    new DeleteHumanTaskUseCaseImpl(new HumanTaskRepositoryImpl(humanTaskDS)),
+    new GetHumanTaskByIdUseCaseImpl(new HumanTaskRepositoryImpl(humanTaskDS)),
+    new GetCountGroupByPersonHumanTasksUsecaseImpl(new HumanTaskRepositoryImpl(humanTaskDS)),
+    new GetHumanTaskTableListByPersonIdUseCaseImpl(new HumanTaskRepositoryImpl(humanTaskDS)),
+    new GetCountHumanTaskByPersonGroupBySkillUsecaseImpl(new HumanTaskRepositoryImpl(humanTaskDS)),
+    new GetTotalCountHumanTaskGroupBySkillUsecaseImpl(new HumanTaskRepositoryImpl(humanTaskDS))
+  )
+
+  server.use("/area", areaMiddleWare)
+  server.use("/language", languageMiddleWare)
+  server.use("/seniority", seniorityMiddleWare)
+  server.use("/person", personMiddleWare)
+  server.use("/skill", skillMiddleWare)
+  server.use("/skillType", skillTypeMiddleWare)
+  server.use("/skillEndors", skillEndorsMiddleWare)
+  server.use("/attitude", attitudeMiddleWare)
+  server.use("/attitudeEndors", attitudeEndorsMiddleWare)
+  server.use("/taskOutput", taskOutputMiddleWare)
+  server.use("/humanTask", humanTaskMiddleWare)
+  server.get("/", (req, res) => res.send("This is our API!"))
   server.listen(3000, () => console.log("Running on http://localhost:3000"))
 
 })()

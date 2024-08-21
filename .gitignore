@@ -1,4 +1,6 @@
 expertfy-api/node_modules/*
 backend/node_modules/*
+aa/*
 dist
 .env
+/ngrok/*
