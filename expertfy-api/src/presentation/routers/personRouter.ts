@@ -7,6 +7,7 @@ import { DeletePersonUseCase } from "../../domain/interfaces/use-cases/person/de
 import { GetPersonByIdUseCase } from "../../domain/interfaces/use-cases/person/getPersonById";
 import { GetPersonAccountInfoUseCaseImpl } from '../../domain/use-cases/person/getPersonAccountInfo';
 import { GetPersonListBySkillTypeIdUseCaseImpl } from '../../domain/use-cases/person/getPersonListBySkillTypeId';
+import { GetSkillIdByPersonAndSkillTypeUseCaseImpl } from '../../domain/use-cases/person/getSkillIdByPersonAndSkillType';
 
 export default function personRouter(
   getAllPersonUseCase: GetAllPersonUseCase,
@@ -15,7 +16,8 @@ export default function personRouter(
   deletePersonUseCase: DeletePersonUseCase,
   getPersonByIdUseCase: GetPersonByIdUseCase,
   getPersonAccountInfoUseCaseImpl: GetPersonAccountInfoUseCaseImpl,
-  getPersonListBySkillTypeIdUseCaseImpl: GetPersonListBySkillTypeIdUseCaseImpl
+  getPersonListBySkillTypeIdUseCaseImpl: GetPersonListBySkillTypeIdUseCaseImpl,
+  getSkillIdByPersonAndSkillTypeUseCaseImpl: GetSkillIdByPersonAndSkillTypeUseCaseImpl
 
 ) {
 
@@ -82,6 +84,25 @@ export default function personRouter(
       res.status(200).send(persons);
     } catch (error) {
       res.status(500).send({ error: "error fetching data", message: error });
+    }
+  });
+
+  router.get("/getSkillIdByPersonAndSkillType/:personId/:skillTypeId", async (req: Request, res: Response) => {
+    const { personId, skillTypeId } = req.params;
+    
+    console.log(`Received personId: ${personId}, skillTypeId: ${skillTypeId}`);
+    
+    if (!personId || !skillTypeId) {
+      return res.status(400).send({ error: "Invalid parameters", message: "personId and skillTypeId are required" });
+    }
+    
+    try {
+      const skillId = await getSkillIdByPersonAndSkillTypeUseCaseImpl.execute(personId, skillTypeId);
+      console.log(`Fetched skillId: ${skillId}`);
+      res.status(200).json({ skillId });
+    } catch (error: any) {
+      console.error("Error fetching data:", error);
+      res.status(500).send({ error: "error fetching data", message: error.message || error });
     }
   });
 

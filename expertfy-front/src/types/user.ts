@@ -7,7 +7,7 @@ export interface User {
   photo: string;
   phone: string;
   linkedin?: string;
-  team?: string;
+  teams?: string;
   employmentStartDate: Date;
   languages: string;
   seniority: string;

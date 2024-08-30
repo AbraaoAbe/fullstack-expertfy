@@ -20,7 +20,7 @@ export class PersonDataSourceImpl implements PersonDataSource {
     try {
       const query = `INSERT INTO ${personTable} 
       (name, lastName, birthDate, email, photo, phone, linkedin, 
-        team, employmentStartDate, seniorityId, areaId)
+      employmentStartDate, seniorityId, areaId)
       VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
       
       const values = [
@@ -31,7 +31,6 @@ export class PersonDataSourceImpl implements PersonDataSource {
         person.photo, 
         person.phone,
         person.linkedin,
-        person.team,
         person.employmentStartDate,
         person.seniorityId,
         person.areaId,
@@ -51,7 +50,7 @@ export class PersonDataSourceImpl implements PersonDataSource {
     try {
       const query = `UPDATE ${personTable} SET
       name=?, lastName=?, birthDate=?, email=?, photo=?, phone=?, linkedin=?, 
-      team=?, employmentStartDate=?, seniorityId=?, areaId=? 
+      employmentStartDate=?, seniorityId=?, areaId=? 
       WHERE id=?`;
   
       const values = [
@@ -62,7 +61,6 @@ export class PersonDataSourceImpl implements PersonDataSource {
         person.photo, 
         person.phone,
         person.linkedin,
-        person.team,
         person.employmentStartDate,
         person.seniorityId,
         person.areaId,
@@ -126,12 +124,14 @@ export class PersonDataSourceImpl implements PersonDataSource {
       SELECT persons.*,
         s.name AS seniority,
         a.name AS area,
-        GROUP_CONCAT(l.name ORDER BY l.name ASC SEPARATOR ', ') AS languages
+        GROUP_CONCAT(l.name ORDER BY l.name ASC SEPARATOR ', ') AS languages,
+        GROUP_CONCAT(DISTINCT ta.team_name ORDER BY ta.team_name ASC SEPARATOR ', ') AS teams
       FROM ${personTable} persons
       JOIN seniority s ON persons.seniorityId = s.id
       JOIN area a ON persons.areaId = a.id
       LEFT JOIN language_person lp ON persons.id = lp.personId
       LEFT JOIN language l ON lp.languageId = l.id 
+      LEFT JOIN team_assignment ta ON persons.id = ta.personId
       WHERE persons.id = ${id};
     `;
       const [rows] = await this.db.execute<RowDataPacket[]>(query, [id]);
@@ -151,9 +151,10 @@ export class PersonDataSourceImpl implements PersonDataSource {
     try {
     const query = `
           SELECT P.id, P.name, P.lastName, P.phone, P.email, P.linkedin, P.birthDate, 
-          P.employmentStartDate, P.photo, P.team, P.seniorityId, P.areaId, P.office,
+          P.employmentStartDate, P.photo, P.seniorityId, P.areaId, P.office,
           se.name AS seniority, ar.name AS area,
-          GROUP_CONCAT(l.name ORDER BY l.name ASC SEPARATOR ', ') AS languages
+          GROUP_CONCAT(l.name ORDER BY l.name ASC SEPARATOR ', ') AS languages,
+          GROUP_CONCAT(DISTINCT ta.team_name ORDER BY ta.team_name ASC SEPARATOR ', ') AS teams
       FROM (
           SELECT DISTINCT personId
           FROM ${skillTable}
@@ -164,8 +165,9 @@ export class PersonDataSourceImpl implements PersonDataSource {
       JOIN area ar ON P.areaId = ar.id
       LEFT JOIN ${languagePersonTable} lp ON P.id = lp.personId
       LEFT JOIN ${languageTable} l ON lp.languageId = l.id
+      LEFT JOIN team_assignment ta ON P.id = ta.personId
       GROUP BY P.id, P.name, P.lastName, P.phone, P.email, P.linkedin, P.birthDate, 
-          P.employmentStartDate, P.photo, P.team, P.seniorityId, P.areaId, P.office,
+          P.employmentStartDate, P.photo, P.seniorityId, P.areaId, P.office,
           se.name, ar.name`;
 
       const [rows] = await this.db.execute<RowDataPacket[]>(query);
@@ -177,6 +179,23 @@ export class PersonDataSourceImpl implements PersonDataSource {
     } catch (error) {
       console.log(error);
       return [] as ExpertListDTO[];
+    }
+  }
+
+  public async getSkillIdByPersonAndSkillType(personId: string, skillType: string): Promise<string> {
+    try {
+      console.log(personId, skillType)
+      const query = `SELECT id FROM ${skillTable} WHERE personId = ${personId} AND skillType = ${skillType}`;
+      console.log(query)
+      const [rows] = await this.db.execute<RowDataPacket[]>(query, [personId, skillType]);
+      console.log(rows)
+      console.log(rows[0])
+      console.log(rows[0].id)
+      return rows[0].id as string;
+
+    } catch (error) {
+      console.log(error);
+      return '';
     }
   }
 }

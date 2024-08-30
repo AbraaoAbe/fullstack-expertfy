@@ -31,6 +31,7 @@ function LinearProgressWithLabel(props: LinearProgressProps & {id: string, value
   createSE?: (skilltypeId: string) => void,
   color?: string }) {
     const [isDisabled, setIsDisabled] = React.useState(false);
+    const [endorsementValue, setendorsementValue] = React.useState(props.endorsement);
   return (
     <Box sx={{ display: 'flex',  width: '100%', mr: 1 , flexDirection: 'column' }}>
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -53,10 +54,11 @@ function LinearProgressWithLabel(props: LinearProgressProps & {id: string, value
                         onClick={() => {
                           props.createSE && props.createSE(props.id);
                           setIsDisabled(true);
+                          setendorsementValue(endorsementValue + 1);
                         }} aria-label="delete">
                 <RecommendIcon />
               </IconButton>
-              <Typography variant="body2" color="text.secondary">{props.endorsement}</Typography>
+              <Typography variant="body2" color="text.secondary">{endorsementValue}</Typography>
             </Box>
           </Box>
 

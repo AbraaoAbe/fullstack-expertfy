@@ -90,7 +90,7 @@ export function SearchTable({
               <TableCell>Área</TableCell>
               <TableCell>Senioridade</TableCell>
               <TableCell>Tempo na Organização</TableCell>
-              <TableCell>Time</TableCell>
+              <TableCell>Times</TableCell>
               <TableCell>Score <ScoreTooltip/></TableCell>
             </TableRow>
           </TableHead>
@@ -125,7 +125,7 @@ export function SearchTable({
                   <TableCell>{row.area}</TableCell>
                   <TableCell>{row.seniority}</TableCell>
                   <TableCell>{dateToRealYear(row.employmentStartDate)}</TableCell>
-                  <TableCell>{row.team}</TableCell>
+                  <TableCell>{row.teams}</TableCell>
                   <TableCell>{setColorView(row.skillScore, row.colorScore)}</TableCell>
                 </TableRow>
               );

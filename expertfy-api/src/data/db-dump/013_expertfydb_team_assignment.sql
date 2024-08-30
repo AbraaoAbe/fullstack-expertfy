@@ -16,28 +16,30 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `task_output`
+-- Table structure for table `team_assignment`
 --
-USE expertfydb;
-DROP TABLE IF EXISTS `task_output`;
+
+DROP TABLE IF EXISTS `team_assignment`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `task_output` (
+CREATE TABLE `team_assignment` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) DEFAULT NULL,
-  `ref` varchar(200) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `team_name` varchar(45) DEFAULT NULL,
+  `personId` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_person_idx` (`personId`),
+  CONSTRAINT `fk_person` FOREIGN KEY (`personId`) REFERENCES `person` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `task_output`
+-- Dumping data for table `team_assignment`
 --
 
-LOCK TABLES `task_output` WRITE;
-/*!40000 ALTER TABLE `task_output` DISABLE KEYS */;
-INSERT INTO `task_output` VALUES (1,'exemplo1','https://www.umartefato.com.br/artefato1'),(2,'exemplo2','https://www.umartefato.com.br/artefato2'),(3,'task3','https://www.umartefato.com.br/artefato3'),(4,'task4','https://www.umartefato.com.br/artefato4'),(5,'task5','https://www.umartefato.com.br/artefato5');
-/*!40000 ALTER TABLE `task_output` ENABLE KEYS */;
+LOCK TABLES `team_assignment` WRITE;
+/*!40000 ALTER TABLE `team_assignment` DISABLE KEYS */;
+INSERT INTO `team_assignment` VALUES (1,'dev-back',1),(2,'dev-front',2),(3,'devOps',3),(4,'dev-front',4),(5,'dev-back',5),(6,'management',6),(7,'TI',7),(8,'TI',8),(9,'TI',9),(10,'dev-back',10),(11,'dev-front',11),(12,'dev-back',12),(13,'devOps',13),(14,'qa',14),(15,'dev-front',15),(16,'dev-back',16),(17,'dev-front',17),(18,'devOps',18),(19,'qa',19),(20,'dev-back',20),(21,'dev-front',21),(22,'devOps',22),(23,'qa',23),(24,'dev-back',24),(25,'dev-back',3);
+/*!40000 ALTER TABLE `team_assignment` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -49,4 +51,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-08-18 21:56:11
+-- Dump completed on 2024-08-30 10:25:31

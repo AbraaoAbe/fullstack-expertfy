@@ -19,6 +19,7 @@ export function AccountDetailsForm(user: User): React.JSX.Element {
   };
 
   const languageArray = (user.languages ?? '').split(',').map(lang => lang.trim()).filter(lang => lang.length > 0);
+  const teamsArray = (user.teams ?? '').split(',').map(team => team.trim()).filter(team => team.length > 0);
   // console.log(typeof user.languages);
   // console.log(user.languages.split(','));
   // console.log(languageArray);
@@ -75,8 +76,8 @@ export function AccountDetailsForm(user: User): React.JSX.Element {
             </Grid>
             <Grid md={6} xs={12}>
               <FormControl fullWidth>
-                <InputLabel>Time</InputLabel>
-                <OutlinedInput readOnly label="Time" name="team" value={user.team} />
+                <InputLabel>Times</InputLabel>
+                <OutlinedInput readOnly label="Time" name="team" value={teamsArray.map(team => team).join(', ')} />
               </FormControl>
             </Grid>
             <Grid md={6} xs={12}>

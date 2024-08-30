@@ -13,7 +13,7 @@ export class TaskOutputDataSourceImpl implements TaskOutputDataSource {
   public async createTaskOutput(taskOut: TaskOutputModel): Promise<boolean>{
     try {
       const query = `INSERT INTO ${tastOutputTable} 
-      (id, name, ref) VALUES (?, ?, ?)`;
+      (id, name, ref, taskId) VALUES (?, ?, ?, ?)`;
 
       const values = [
         taskOut.id,
@@ -36,7 +36,7 @@ export class TaskOutputDataSourceImpl implements TaskOutputDataSource {
   public async updateTaskOutput(id: string, taskOut: TaskOutputModel): Promise<boolean>{
     try {
       const query = `UPDATE ${tastOutputTable} SET
-      name=? ref=? WHERE id=?`;
+      name=? ref=? taskId=? WHERE id=?`;
 
       const values = [
         taskOut.name,

@@ -20,12 +20,12 @@ export class HumanTaskDataSourceImpl implements HumanTaskDataSource {
   public async createHumanTask(taskOut: HumanTaskModel): Promise<boolean>{
     try {
       const query = `INSERT INTO ${humanTaskTable} 
-      (skillId, taskOutputId, taskType) VALUES (?, ?, ?)`;
+      (skillId, taskType, date) VALUES (?, ?, ?)`;
 
       const values = [
         taskOut.skillId,
-        taskOut.taskOutputId,
         taskOut.taskType,
+        taskOut.date
       ];
 
       const [rows] = await this.db.execute<RowDataPacket[]>(
@@ -41,12 +41,12 @@ export class HumanTaskDataSourceImpl implements HumanTaskDataSource {
   public async updateHumanTask(id: string, humanTask: HumanTaskModel): Promise<boolean>{
     try {
       const query = `UPDATE ${humanTaskTable} SET
-      skillId=?, taskOutputId=?, taskType=? WHERE id=?`;
+      skillId=?, taskType=? WHERE id=?`;
 
       const values = [
         humanTask.skillId,
-        humanTask.taskOutputId,
         humanTask.taskType,
+        humanTask.date,
         id
       ];
 
@@ -127,11 +127,11 @@ export class HumanTaskDataSourceImpl implements HumanTaskDataSource {
 
   public async getHumanTaskTableListByPersonId(personId: string): Promise<PersonTableDTO[]>{
     try {
-      const query = `SELECT H.id, T.name AS taskname, T.ref AS artefact, S.skilltype, ST.name AS skillname, ST.description, date, H.skillId as skillId 
+      const query = `SELECT T.id, T.name AS taskname, T.ref AS artefact, S.skilltype, ST.name AS skillname, ST.description, date, H.skillId as skillId 
             FROM ${humanTaskTable} H
             JOIN ${skillTable} S ON H.skillId = S.id
             JOIN ${skillTypeTable} ST ON S.skillType = ST.id
-            JOIN task_output T ON H.taskOutputId = T.id 
+            JOIN task_output T ON H.id = T.taskId
             where S.personId = ${personId}
             ORDER BY date DESC;`;
 

@@ -8,4 +8,5 @@ export interface PersonRepository {
   getAllPerson(): Promise<PersonModel[]>;
   getPersonAccountInfo(id: string): Promise<PersonModel>;
   getPersonListBySkillTypeId(id: string): Promise<PersonModel[]>;
+  getSkillIdByPersonAndSkillTypeId(personId: string, skillTypeId: string): Promise<string>;
 }

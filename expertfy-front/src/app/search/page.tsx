@@ -63,7 +63,7 @@ export default function Page(): React.JSX.Element {
           setCount(data.length);
           setPaginatedExperts(applyPagination(data, page, rowsPerPage));
           setShowAlertWarningEmptyExperts(false);
-          console.log(data)
+          // console.log(data)
         });
       });
     }
@@ -72,21 +72,12 @@ export default function Page(): React.JSX.Element {
   // Get the filters values for the advanced search and apply the filter
   const handleAdvancedFilters = (filters: AdvancedFilters) => {
     // Check if the expert list is empty
-    console.log(filters)
+    // console.log(filters)
     if(experts.length === 0) {
       setShowAlertWarningEmptyExperts(true);
       return;
     }
     let filteredExpertsLocal: Expert[] = experts;
-    // if (filteredExperts.length !== 0) {
-    //   filteredExpertsLocal = filteredExperts;
-    //   console.log(filteredExpertsLocal)
-    // }
-    // else {
-    //   filteredExpertsLocal = experts;
-    //   console.log(filteredExpertsLocal)
-    // }
-
 
 
     // Default: none filter

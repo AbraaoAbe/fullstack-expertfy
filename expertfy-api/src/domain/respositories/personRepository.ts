@@ -44,4 +44,9 @@ export class PersonRepositoryImpl implements PersonRepository {
     const personListBySkillTypeId = await this.personDataSource.getPersonListBySkillTypeId(id);
     return personListBySkillTypeId;
   }
+
+  public async getSkillIdByPersonAndSkillTypeId(personId: string, skillTypeId: string): Promise<string> {
+    const skillIdByPersonAndSkillTypeId = await this.personDataSource.getSkillIdByPersonAndSkillType(personId, skillTypeId);
+    return skillIdByPersonAndSkillTypeId;
+  }
 }
